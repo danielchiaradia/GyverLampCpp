@@ -22,6 +22,9 @@ extern "C" uint32_t _FS_end;
 #define U_FS U_SPIFFS
 #endif
 
+// It is required to include Wifianager before ESPAsyncWebServer and in between WEBSERVER_H to avoid redeclaration of HTTP Methods.
+#include <WiFiManager.h>
+#define WEBSERVER_H
 #include <ESPAsyncWebServer.h>
 #include <ESPReactWifiManager.h>
 
@@ -40,7 +43,8 @@ bool isUpdatingFlag = false;
 LampWebServer *object = nullptr;
 AsyncWebServer *webServer = nullptr;
 AsyncWebSocket *socket = nullptr;
-ESPReactWifiManager *wifiManager = nullptr;
+// ESPReactWifiManager *wifiManager = nullptr;
+WiFiManager wifiManager;
 bool wifiConnected = false;
 
 void (*onConnectedCallback)(bool) = nullptr;
@@ -377,54 +381,18 @@ void LampWebServer::autoConnect()
         return;
     }
 
-    if (wifiManager) {
-        return;
+    if (setupMode) {
+        wifiManager.resetSettings();
     }
 
-    wifiManager = new ESPReactWifiManager();
-    wifiManager->setFallbackToAp(true);
-    wifiManager->onFinished([](bool isAPMode) {
-        webServer->begin();
-        wifiConnected = !isAPMode;
-        if (onConnectedCallback) {
-            onConnectedCallback(wifiConnected);
-        }
-    });
-    wifiManager->onNotFound([](AsyncWebServerRequest* request) {
-        if (setupMode) {
-            request->redirect(String(F("http://"))
-                + request->client()->localIP().toString()
-                + String(F("/update")));
-            return;
-        }
-        if (request->url() == String(F("/"))
-                || request->url() == String(F("/wifi.html"))
-                || request->url() == String(F("/index.html"))) {
-            request->redirect(String(F("http://"))
-                + request->client()->localIP().toString()
-                + String(F("/update")));
-        } else {
-            request->send(FLASHFS, F("index.html"));
-        }
-    });
-    wifiManager->onCaptiveRedirect([](AsyncWebServerRequest* request) {
-        if (setupMode) {
-            request->redirect(String(F("http://"))
-                + request->client()->localIP().toString()
-                + String(F("/update")));
-            return true;
-        }
-        return false;
-    });
-    wifiManager->setupHandlers(webServer);
-    wifiManager->setHostname(mySettings->connectionSettings.hostname);
-    wifiManager->setApOptions(mySettings->connectionSettings.apName,
-                              mySettings->connectionSettings.apPassword);
-    wifiManager->setStaOptions(mySettings->connectionSettings.ssid,
-                               mySettings->connectionSettings.password,
-                               mySettings->connectionSettings.login,
-                               mySettings->connectionSettings.bssid);
-    wifiManager->autoConnect();
+    wifiManager.autoConnect(mySettings->connectionSettings.apName.c_str(), 
+                            mySettings->connectionSettings.apPassword.c_str());
+
+    Serial.print("Continue");
+    webServer->begin();
+    wifiConnected = true;
+    onConnectedCallback(wifiConnected);
+
 }
 
 LampWebServer::LampWebServer(uint16_t webPort)
@@ -438,8 +406,6 @@ LampWebServer::LampWebServer(uint16_t webPort)
 
     webServer->rewrite(PSTR("/"), PSTR("/index.html"));
     webServer->serveStatic(PSTR("/"), FLASHFS, PSTR("/"), PSTR("no-cache"));
-    // webServer->rewrite(PSTR("/index.html"), PSTR("/index-cdn.html")).setFilter(ON_STA_FILTER);
-    // webServer->rewrite(PSTR("/wifi.html"), PSTR("/wifi-cdn.html")).setFilter(ON_STA_FILTER);
     webServer->serveStatic(PSTR("/static/js/"), FLASHFS, PSTR("/"), PSTR("max-age=86400"));
     webServer->serveStatic(PSTR("/static/css/"), FLASHFS, PSTR("/"), PSTR("max-age=86400"));
     webServer->serveStatic(PSTR("/effects.json"), FLASHFS, PSTR("/effects.json.save"), PSTR("no-cache"));
@@ -487,10 +453,6 @@ LampWebServer::LampWebServer(uint16_t webPort)
 
 void LampWebServer::loop()
 {
-    if (wifiManager) {
-        wifiManager->loop();
-    }
-
     if (restartTimer > 0 && (millis() > restartTimer)) {
         ESP.restart();
     }
