@@ -3,6 +3,14 @@
 #define ARDUINOJSON_ENABLE_PROGMEM 1
 #include <ArduinoJson.h>
 
+#if defined(ESP32)
+#include <SPIFFS.h>
+#define FLASHFS SPIFFS
+#else
+#include <LittleFS.h>
+#define FLASHFS LittleFS
+#endif
+
 #define mySettings Settings::instance()
 
 class AsyncWebSocket;
@@ -74,7 +82,7 @@ public:
         uint8_t state = 0;
     };
 
-    long effectVersion = 0;
+    String effectMD5;
 
     static Settings *instance();
     static void Initialize(uint32_t saveInterval = 3000);
@@ -108,5 +116,8 @@ public:
 
 protected:
     Settings(uint32_t saveInterval = 3000);
+
+private:
+    String calculateMD5(File &file);
 };
 

@@ -7,14 +7,10 @@
 
 #include <ESPAsyncWebServer.h>
 
-#if defined(ESP32)
-#include <SPIFFS.h>
-#define FLASHFS SPIFFS
-#else
-#include <LittleFS.h>
-#define FLASHFS LittleFS
-#endif
+
 #include "effects/Effect.h"
+
+#include<MD5Builder.h>
 
 namespace {
 
@@ -211,6 +207,11 @@ void Settings::saveEffects()
     if (file) {
         file.close();
     }
+
+    file = FLASHFS.open(effectsFileNameSave, "r");
+    mySettings->effectMD5 = calculateMD5(file);
+    file.close();
+
     Serial.println(F("Done!"));
 
     busy = false;
@@ -260,7 +261,6 @@ void Settings::processConfig(const String &message)
             } else {
                 effectsManager->updateSettingsById(id, effect);
             }
-            effectVersion++;
             saveLater();
         } else if (event == F("ALARMS_CHANGED")) {
 
@@ -511,11 +511,13 @@ bool Settings::readEffects()
     }
 
     Serial.println("reading effects.json");
-    while (effects.available()) {
+    while(effects.available()) {
         String buffer = effects.readStringUntil('\n');
         Serial.println(buffer);
     }
     effects.seek(0);
+    
+    mySettings->effectMD5 = calculateMD5(effects);
 
     DynamicJsonDocument json(serializeSize);
     DeserializationError err = deserializeJson(json, effects);
@@ -540,6 +542,22 @@ bool Settings::readEffects()
     copyFile(effectsFileNameSave, effectsFileName);
 
     return true;
+}
+
+String Settings::calculateMD5(File &file) {
+    MD5Builder builder = MD5Builder();
+    builder.begin();
+    
+    file.seek(0);
+    while(file.available()) {
+        String buffer = file.readStringUntil('\n');
+        builder.add(buffer);
+    }
+
+    file.seek(0);
+    builder.calculate();
+
+    return builder.toString();
 }
 
 void Settings::buildSettingsJson(JsonObject &root)

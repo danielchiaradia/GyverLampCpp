@@ -447,7 +447,7 @@ LampWebServer::LampWebServer(uint16_t webPort)
 
     webServer->on(PSTR("/effects"), HTTP_GET, [](AsyncWebServerRequest *request) {
         AsyncWebHeader* etag = request->getHeader("If-None-Match");
-        if (etag && etag->value().toInt() == mySettings->effectVersion) {
+        if (etag && etag->value().equals(mySettings->effectMD5)) {
             request->send(304);
         }
         else {
@@ -456,7 +456,7 @@ LampWebServer::LampWebServer(uint16_t webPort)
             mySettings->buildEffectsJson(root);
             response->setLength();
             response->setContentType("application/json");
-            response->addHeader("ETag", String(mySettings->effectVersion));
+            response->addHeader("ETag", mySettings->effectMD5);
             request->send(response);
         }
     });
