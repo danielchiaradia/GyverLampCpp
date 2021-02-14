@@ -30,7 +30,6 @@ extern "C" uint32_t _FS_end;
 #include <ArduinoJson.h>
 #include <Ticker.h>
 
-
 namespace  {
 
 bool setupMode = false;
@@ -93,9 +92,9 @@ void parseTextMessage(const String &message)
 void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
     if (type == WS_EVT_CONNECT) {
         Serial.printf_P(PSTR("ws[%s][%u] connect\n"), server->url(), client->id());
-        //        client->printf("Hello Client %u :)", client->id());
-        client->ping();
-        lampWebServer->sendConfig();
+        // Avoid ping: https://github.com/me-no-dev/ESPAsyncWebServer/issues/680
+        String config = lampWebServer->createConfigJson();
+        client->printf(config.c_str());
     } else if (type == WS_EVT_DISCONNECT) {
         Serial.printf_P(PSTR("ws[%s][%u] disconnect\n"), server->url(), client->id());
     } else if (type == WS_EVT_ERROR) {
@@ -438,16 +437,32 @@ LampWebServer::LampWebServer(uint16_t webPort)
     webServer->addHandler(socket);
 
     webServer->rewrite(PSTR("/"), PSTR("/index.html"));
-    webServer->rewrite(PSTR("/index.html"), PSTR("/index-cdn.html")).setFilter(ON_STA_FILTER);
-    webServer->rewrite(PSTR("/wifi.html"), PSTR("/wifi-cdn.html")).setFilter(ON_STA_FILTER);
+    webServer->serveStatic(PSTR("/"), FLASHFS, PSTR("/"), PSTR("no-cache"));
+    // webServer->rewrite(PSTR("/index.html"), PSTR("/index-cdn.html")).setFilter(ON_STA_FILTER);
+    // webServer->rewrite(PSTR("/wifi.html"), PSTR("/wifi-cdn.html")).setFilter(ON_STA_FILTER);
     webServer->serveStatic(PSTR("/static/js/"), FLASHFS, PSTR("/"), PSTR("max-age=86400"));
     webServer->serveStatic(PSTR("/static/css/"), FLASHFS, PSTR("/"), PSTR("max-age=86400"));
-    webServer->serveStatic(PSTR("/effects.json"), FLASHFS, PSTR("/effects.json"), PSTR("no-cache"));
+    webServer->serveStatic(PSTR("/effects.json"), FLASHFS, PSTR("/effects.json.save"), PSTR("no-cache"));
     webServer->serveStatic(PSTR("/settings.json"), FLASHFS, PSTR("/settings.json"), PSTR("no-cache"));
-    webServer->serveStatic(PSTR("/"), FLASHFS, PSTR("/"), PSTR("max-age=86400"));
+
+    webServer->on(PSTR("/effects"), HTTP_GET, [](AsyncWebServerRequest *request) {
+        AsyncWebHeader* etag = request->getHeader("If-None-Match");
+        if (etag && etag->value().toInt() == mySettings->effectVersion) {
+            request->send(304);
+        }
+        else {
+            PrettyAsyncJsonResponse *response = new PrettyAsyncJsonResponse(true, 10000);
+            JsonArray root = response->getRoot().to<JsonArray>();
+            mySettings->buildEffectsJson(root);
+            response->setLength();
+            response->setContentType("application/json");
+            response->addHeader("ETag", String(mySettings->effectVersion));
+            request->send(response);
+        }
+    });
 
     webServer->on(PSTR("/effectJson"), HTTP_GET, [](AsyncWebServerRequest *request) {
-        PrettyAsyncJsonResponse *response = new PrettyAsyncJsonResponse(false, 1024);
+        PrettyAsyncJsonResponse *response = new PrettyAsyncJsonResponse(false);
         JsonObject root = response->getRoot();
         mySettings->buildJsonMqtt(root);
         response->setLength();
@@ -491,23 +506,27 @@ void LampWebServer::sendConfig()
         return;
     }
 
-    String buffer;
-    {
-        Serial.println(F("Sending state to ws clients"));
+    String buffer = createConfigJson();
 
-        DynamicJsonDocument json(512);
-        JsonObject root = json.to<JsonObject>();
-        root[F("activeEffect")] = effectsManager->activeEffectIndex();
-        root[F("working")] = mySettings->generalSettings.working;
-        serializeJson(json, buffer);
-
-        serializeJsonPretty(json, Serial);
-        Serial.println();
-    }
     if (buffer.length() == 0) {
         return;
     }
     socket->textAll(buffer);
+}
+
+String LampWebServer::createConfigJson() {
+    String buffer;
+
+    DynamicJsonDocument json(512);
+    JsonObject root = json.to<JsonObject>();
+    root[F("activeEffect")] = effectsManager->activeEffectIndex();
+    root[F("working")] = mySettings->generalSettings.working;
+    serializeJson(json, buffer);
+
+    serializeJsonPretty(json, Serial);
+    Serial.println();
+
+    return buffer;
 }
 
 bool LampWebServer::isUpdating()

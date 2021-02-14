@@ -30,8 +30,8 @@ Note: 1MB boards are not capable of OTA firmware updates
 
 # How to build
 
-1. build firmware: `pio run -e nodemcu`
-2. build filesystem: `pio run --target buildfs -e nodemcu`
+1. build firmware: `pio run -e esp32dev`
+2. build filesystem: `pio run --target buildfs -e esp32dev`
 
 # Filesystem build
 
@@ -50,7 +50,7 @@ Easy steps:
 
 **PLEASE!** Do not forget to build or to download and extract data artifacts from releases page! It is not present in git repository!
 
-Then just upload built fs to module using `pio run --target uploadfs -e nodemcu`
+Then just upload built fs to module using `pio run --target uploadfs -e esp32dev`
 
 ## Configuration
 

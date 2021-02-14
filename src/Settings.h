@@ -74,6 +74,8 @@ public:
         uint8_t state = 0;
     };
 
+    long effectVersion = 0;
+
     static Settings *instance();
     static void Initialize(uint32_t saveInterval = 3000);
 

@@ -2,7 +2,7 @@
   "activeEffect": 0,
   "logInterval": 0,
   "matrix": {
-    "pin": 2,
+    "pin": 21,
     "width": 16,
     "height": 16,
     "segments": 1,
@@ -34,7 +34,7 @@
     "model": "firelamp"
   },
   "button": {
-    "pin": 4,
+    "pin": 27,
     "type": 1,
     "state": 0
   }
