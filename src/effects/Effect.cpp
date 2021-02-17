@@ -32,6 +32,9 @@ void Effect::update(const JsonObject &json)
     if (json.containsKey(F("name"))) {
         settings.name = json[F("name")].as<String>();
     }
+    if (json.containsKey(F("e"))) {
+        settings.enabled = json[F("e")];
+    }
     if (json.containsKey(F("s"))) {
         settings.speed = json[F("s")];
     }
@@ -50,6 +53,7 @@ void Effect::update(const JsonObject &json)
     if (json.containsKey(F("scale"))) {
         settings.scale = json[F("scale")];
     }
+    
 }
 
 void Effect::writeSettings(JsonObject &json)

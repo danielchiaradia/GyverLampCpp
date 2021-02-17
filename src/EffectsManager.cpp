@@ -143,11 +143,16 @@ void EffectsManager::next()
 {
     myMatrix->clear();
     uint8_t aIndex = activeIndex;
-    if (aIndex == effects.size() - 1) {
-        aIndex = 0;
-    } else {
-        ++aIndex;
+
+    do {
+        if (aIndex == effects.size() - 1) {
+            aIndex = 0;
+        } else {
+            ++aIndex;
+        }
     }
+    while (!effects[aIndex]->settings.enabled);
+
     activateEffect(aIndex);
 }
 
@@ -155,11 +160,16 @@ void EffectsManager::previous()
 {
     myMatrix->clear();
     uint8_t aIndex = activeIndex;
-    if (aIndex == 0) {
-        aIndex = static_cast<uint8_t>(effects.size() - 1);
-    } else {
-        --aIndex;
+
+    do {
+        if (aIndex == 0) {
+            aIndex = static_cast<uint8_t>(effects.size() - 1);
+        } else {
+            --aIndex;
+        }
     }
+    while (!effects[aIndex]->settings.enabled);
+    
     activateEffect(aIndex);
 }
 

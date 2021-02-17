@@ -26,7 +26,6 @@ extern "C" uint32_t _FS_end;
 #include <WiFiManager.h>
 #define WEBSERVER_H
 #include <ESPAsyncWebServer.h>
-#include <ESPReactWifiManager.h>
 
 #define ARDUINOJSON_ENABLE_PROGMEM 1
 #include <AsyncJson.h>
@@ -43,7 +42,6 @@ bool isUpdatingFlag = false;
 LampWebServer *object = nullptr;
 AsyncWebServer *webServer = nullptr;
 AsyncWebSocket *socket = nullptr;
-// ESPReactWifiManager *wifiManager = nullptr;
 WiFiManager wifiManager;
 bool wifiConnected = false;
 
@@ -55,13 +53,13 @@ uint32_t restartTimer = 0;
 
 Ticker updateTimer;
 
-void staticUpdate()
+void staticUpdate(uint32_t source)
 {
     if (!lampWebServer) {
         return;
     }
 
-    lampWebServer->sendConfig();
+    lampWebServer->sendConfig(source);
 }
 
 const char upload_html[] PROGMEM = \
@@ -88,9 +86,9 @@ const char upload_html[] PROGMEM = \
 ".btn:disabled{background:#98342b;color:#fff;cursor:pointer}\n"\
 "</style>\n";
 
-void parseTextMessage(const String &message)
+void parseTextMessage(const String &message, uint32_t source)
 {
-    mySettings->processConfig(message);
+    mySettings->processConfig(message, source);
 }
 
 void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
@@ -142,7 +140,7 @@ void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
 
             if (info->opcode == WS_TEXT) {
                 //                client->text("I got your text message");
-                parseTextMessage(msg);
+                parseTextMessage(msg, client->id());
             } else {
                 //                client->binary("I got your binary message");
                 Serial.println(F("Received binary message"));
@@ -201,7 +199,7 @@ void onWsEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventTyp
                         info->message_opcode == WS_TEXT ? PSTR("text") : PSTR("binary"));
                     if (info->message_opcode == WS_TEXT) {
                         //                        client->text("I got your text message");
-                        parseTextMessage(msg);
+                        parseTextMessage(msg, client->id());
                     } else {
                         //                        client->binary("I got your binary message");
                         Serial.println(F("Received binary message"));
@@ -388,11 +386,9 @@ void LampWebServer::autoConnect()
     wifiManager.autoConnect(mySettings->connectionSettings.apName.c_str(), 
                             mySettings->connectionSettings.apPassword.c_str());
 
-    Serial.print("Continue");
     webServer->begin();
     wifiConnected = true;
     onConnectedCallback(wifiConnected);
-
 }
 
 LampWebServer::LampWebServer(uint16_t webPort)
@@ -408,7 +404,6 @@ LampWebServer::LampWebServer(uint16_t webPort)
     webServer->serveStatic(PSTR("/"), FLASHFS, PSTR("/"), PSTR("no-cache"));
     webServer->serveStatic(PSTR("/static/js/"), FLASHFS, PSTR("/"), PSTR("max-age=86400"));
     webServer->serveStatic(PSTR("/static/css/"), FLASHFS, PSTR("/"), PSTR("max-age=86400"));
-    webServer->serveStatic(PSTR("/effects.json"), FLASHFS, PSTR("/effects.json.save"), PSTR("no-cache"));
     webServer->serveStatic(PSTR("/settings.json"), FLASHFS, PSTR("/settings.json"), PSTR("no-cache"));
 
     webServer->on(PSTR("/effects"), HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -458,7 +453,7 @@ void LampWebServer::loop()
     }
 }
 
-void LampWebServer::sendConfig()
+void LampWebServer::sendConfig(uint32_t source)
 {
     if (!socket) {
         return;
@@ -473,7 +468,13 @@ void LampWebServer::sendConfig()
     if (buffer.length() == 0) {
         return;
     }
-    socket->textAll(buffer);
+    LinkedList<AsyncWebSocketClient *> clients = socket->getClients();
+
+    for (const auto &c : clients) {
+        if (c->status() == WS_CONNECTED && c->id() != source) {
+            c->text(buffer);
+        }
+    }
 }
 
 String LampWebServer::createConfigJson() {
@@ -501,7 +502,12 @@ void LampWebServer::onConnected(void (*func)(bool))
     onConnectedCallback = func;
 }
 
+void LampWebServer::update(uint32_t source)
+{
+    updateTimer.once(2, staticUpdate, source);
+}
+
 void LampWebServer::update()
 {
-    updateTimer.once(2, staticUpdate);
+    update(UINT32_MAX);
 }

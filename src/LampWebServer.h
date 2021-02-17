@@ -16,10 +16,11 @@ public:
     bool isConnected();
     void autoConnect();
     void loop();
-    void sendConfig();
+    void sendConfig(uint32_t source);
     bool isUpdating();
     void onConnected(void (*func)(bool));
     void update();
+    void update(uint32_t source);
     String createConfigJson();
 
 protected:

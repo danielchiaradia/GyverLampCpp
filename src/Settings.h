@@ -24,6 +24,7 @@ public:
         uint8_t speed = 1;
         uint8_t scale = 100;
         uint8_t brightness = 80;
+        bool enabled = true;
     };
 
     struct GeneralSettings {
@@ -100,6 +101,7 @@ public:
     void buildJsonMqtt(JsonObject &root);
     void writeEffectsMqtt(JsonArray &array);
 
+    void processConfig(const String &message, uint32_t source);
     void processConfig(const String &message);
     void processCommandMqtt(const String &message);
 

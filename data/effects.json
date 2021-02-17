@@ -2,6 +2,7 @@
   {
     "i": "Fire",
     "n": "Fire",
+    "e": 1, 
     "s": 37,
     "l": 1,
     "b": 80
@@ -9,6 +10,7 @@
   {
     "i": "Sparkles",
     "n": "Sparkles",
+    "e": 1, 
     "s": 121,
     "l": 12,
     "b": 255
@@ -16,6 +18,8 @@
   {
     "i": "VerticalRainbow",
     "n": "Vertical rainbow",
+    "e": 1, 
+    "e": 1, 
     "s": 100,
     "l": 18,
     "b": 80
@@ -23,6 +27,7 @@
   {
     "i": "HorizontalRainbow",
     "n": "Horizontal rainbow",
+    "e": 1, 
     "s": 100,
     "l": 18,
     "b": 80
@@ -30,6 +35,7 @@
   {
     "i": "Colors",
     "n": "Color change",
+    "e": 1, 
     "s": 112,
     "l": 1,
     "b": 80
@@ -37,6 +43,7 @@
   {
     "i": "MadnessNoise",
     "n": "Madness 3D",
+    "e": 1, 
     "s": 50,
     "l": 100,
     "b": 80
@@ -44,6 +51,7 @@
   {
     "i": "CloudNoise",
     "n": "Clouds 3D",
+    "e": 1, 
     "s": 1,
     "l": 100,
     "b": 80
@@ -51,6 +59,7 @@
   {
     "i": "LavaNoise",
     "n": "Lava 3D",
+    "e": 1, 
     "s": 1,
     "l": 100,
     "b": 80
@@ -58,6 +67,7 @@
   {
     "i": "PlasmaNoise",
     "n": "Plasma 3D",
+    "e": 1, 
     "s": 1,
     "l": 100,
     "b": 80
@@ -65,6 +75,7 @@
   {
     "i": "RainbowNoise",
     "n": "Rainbow 3D",
+    "e": 1, 
     "s": 1,
     "l": 52,
     "b": 80
@@ -72,6 +83,7 @@
   {
     "i": "RainbowStripeNoise",
     "n": "Rainbow stripe 3D",
+    "e": 1, 
     "s": 1,
     "l": 47,
     "b": 80
@@ -79,6 +91,7 @@
   {
     "i": "ZebraNoise",
     "n": "Zebra 3D",
+    "e": 1, 
     "s": 1,
     "l": 26,
     "b": 80
@@ -86,6 +99,7 @@
   {
     "i": "ForestNoise",
     "n": "Forest 3D",
+    "e": 1, 
     "s": 1,
     "l": 64,
     "b": 80
@@ -93,6 +107,7 @@
   {
     "i": "OceanNoise",
     "n": "Ocean 3D",
+    "e": 1, 
     "s": 1,
     "l": 24,
     "b": 80
@@ -100,6 +115,7 @@
   {
     "i": "Color",
     "n": "Single color",
+    "e": 1, 
     "s": 10,
     "l": 1,
     "b": 80,
@@ -108,6 +124,7 @@
   {
     "i": "Snow",
     "n": "Snow",
+    "e": 1, 
     "s": 255,
     "l": 33,
     "b": 80,
@@ -116,6 +133,7 @@
   {
     "i": "Matrix",
     "n": "Matrix",
+    "e": 1, 
     "s": 255,
     "l": 25,
     "b": 80
@@ -123,6 +141,7 @@
   {
     "i": "Lighters",
     "n": "Lighters",
+    "e": 1, 
     "s": 127,
     "l": 10,
     "b": 80
@@ -130,6 +149,7 @@
   {
     "i": "Clock",
     "n": "Clock vertical",
+    "e": 1, 
     "s": 250,
     "l": 1,
     "b": 80,
@@ -139,6 +159,7 @@
   {
     "i": "ClockHorizontal1",
     "n": "Clock horizontal colored",
+    "e": 1, 
     "s": 250,
     "l": 1,
     "b": 80,
@@ -148,6 +169,7 @@
   {
     "i": "ClockHorizontal2",
     "n": "Clock horizontal",
+    "e": 1, 
     "s": 250,
     "l": 1,
     "b": 80,
@@ -157,6 +179,7 @@
   {
     "i": "ClockHorizontal3",
     "n": "Clock horizontal single",
+    "e": 1, 
     "s": 250,
     "l": 1,
     "b": 80,
@@ -166,6 +189,7 @@
   {
     "i": "Starfall",
     "n": "Starfall",
+    "e": 1, 
     "s": 80,
     "l": 100,
     "b": 80,
@@ -175,6 +199,7 @@
   {
     "i": "DiagonalRainbow",
     "n": "DiagonalRainbow",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -182,6 +207,7 @@
   {
     "i": "Waterfall",
     "n": "Waterfall",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -191,6 +217,7 @@
   {
     "i": "TwirlRainbow",
     "n": "Twirl Rainbow",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -200,6 +227,7 @@
   {
     "i": "PulseCircles",
     "n": "Pulsing circles",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -208,6 +236,7 @@
   {
     "i": "Animation",
     "n": "Aqarium",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -215,6 +244,7 @@
   {
     "i": "Storm",
     "n": "Storm",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -224,6 +254,7 @@
   {
     "i": "Matrix2",
     "n": "Matrix 2",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -231,6 +262,7 @@
   {
     "i": "TrackingLighters",
     "n": "Tracking Lighters",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -239,6 +271,7 @@
   {
     "i": "LightBalls",
     "n": "Light Balls",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -247,6 +280,7 @@
   {
     "i": "MovingCube",
     "n": "Moving Cube",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -255,6 +289,7 @@
   {
     "i": "WhiteColor",
     "n": "White Color",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -262,6 +297,7 @@
   {
     "i": "PulsingComet",
     "n": "Pulsing Comet",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -269,6 +305,7 @@
   {
     "i": "DoubleComets",
     "n": "Double Comet",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -276,6 +313,7 @@
   {
     "i": "TripleComets",
     "n": "Triple Comet",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -283,6 +321,7 @@
   {
     "i": "RainbowComet",
     "n": "Rainbow Comet",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -290,6 +329,7 @@
   {
     "i": "ColorComet",
     "n": "Color Comet",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -297,6 +337,7 @@
   {
     "i": "MovingFlame",
     "n": "Moving Flame",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -304,6 +345,7 @@
   {
     "i": "FractorialFire",
     "n": "Fractorial Fire",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -311,6 +353,7 @@
   {
     "i": "RainbowKite",
     "n": "Rainbow Kite",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -318,6 +361,7 @@
   {
     "i": "BouncingBalls",
     "n": "Bouncing Balls",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -326,6 +370,7 @@
   {
     "i": "Spiral",
     "n": "Spiral",
+    "e": 1, 
     "s": 29,
     "l": 20,
     "b": 80,
@@ -334,6 +379,7 @@
   {
     "i": "MetaBalls",
     "n": "Meta Balls",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -341,6 +387,7 @@
   {
     "i": "Sinusoid",
     "n": "Sinusoid",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -348,6 +395,7 @@
   {
     "i": "WaterfallPalette",
     "n": "Waterfall Pallete",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -356,6 +404,7 @@
   {
     "i": "Rain",
     "n": "Rain",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -363,6 +412,7 @@
   {
     "i": "Prismata",
     "n": "Prismata",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -370,6 +420,7 @@
   {
     "i": "Flock",
     "n": "Flock",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -378,6 +429,7 @@
   {
     "i": "Whirl",
     "n": "Whirl",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -388,6 +440,7 @@
   {
     "i": "Wave",
     "n": "Wave",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -395,6 +448,7 @@
   {
     "i": "Fire12",
     "n": "Fire12",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -405,6 +459,7 @@
   {
     "i": "Fire18",
     "n": "Fire18",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80
@@ -412,6 +467,7 @@
   {
     "i": "RainNeo",
     "n": "Rain Neo",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -428,6 +484,7 @@
   {
     "i": "Twinkles",
     "n": "Twinkles",
+    "e": 1, 
     "s": 100,
     "l": 20,
     "b": 80,
@@ -437,6 +494,7 @@
   {
     "i": "DMX",
     "n": "e131 or art-net",
+    "e": 1, 
     "s": 0,
     "l": 20,
     "b": 81,
@@ -450,6 +508,7 @@
   {
     "i": "Text",
     "n": "Scrolling Text",
+    "e": 1, 
     "s": 55,
     "l": 1,
     "b": 80,

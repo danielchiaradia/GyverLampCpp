@@ -226,6 +226,11 @@ void Settings::writeEffectsMqtt(JsonArray &array)
 
 void Settings::processConfig(const String &message)
 {
+    processConfig(message, UINT32_MAX);
+}
+
+void Settings::processConfig(const String &message, uint32_t source)
+{
     if (busy) {
         Serial.println(F("\nSaving in progress! Delaying operation.\n"));
         pendingConfig.push_back(message);
@@ -270,7 +275,7 @@ void Settings::processConfig(const String &message)
     if (mqtt) {
         mqtt->update();
     }
-    lampWebServer->update();
+    lampWebServer->update(source);
 }
 
 void Settings::processCommandMqtt(const String &message)
@@ -613,6 +618,7 @@ void Settings::buildEffectsJson(JsonArray &effects)
         JsonObject effectObject = effects.createNestedObject();
         effectObject[F("i")] = effect->settings.id;
         effectObject[F("n")] = effect->settings.name;
+        effectObject[F("e")] = effect->settings.enabled;
         effectObject[F("s")] = effect->settings.speed;
         effectObject[F("l")] = effect->settings.scale;
         effectObject[F("b")] = effect->settings.brightness;
@@ -625,6 +631,7 @@ void Settings::buildJsonMqtt(JsonObject &root)
     root[F("state")] = generalSettings.working ? F("ON") : F("OFF");
     root[F("brightness")] = effectsManager->activeEffect()->settings.brightness;
     root[F("speed")] = effectsManager->activeEffect()->settings.speed;
+    root[F("enabled")] = effectsManager->activeEffect()->settings.enabled;
     root[F("scale")] = effectsManager->activeEffect()->settings.scale;
     root[F("effect")] = effectsManager->activeEffect()->settings.name;
     root[F("localIp")] = WiFi.localIP().toString();
