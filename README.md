@@ -37,16 +37,10 @@ Note: 1MB boards are not capable of OTA firmware updates
 
 Manual steps:
 
-- build https://github.com/CODeRUS/led-lamp-webui
-- build https://github.com/CODeRUS/wifimanager-react-page
-- copy gzipped artifacts without folder structure to data folder
+- build https://github.com/danielchiaradia/led-lamp-webui
+- copy gzipped artifacts to data folder and remove any precached files.
 - build filesystem in Platform IO
 
-Easy steps:
-
-- grab data.zip from latest release (https://github.com/CODeRUS/GyverLampCpp/releases)
-- extract to project folder
-- build filesystem in Platform IO
 
 **PLEASE!** Do not forget to build or to download and extract data artifacts from releases page! It is not present in git repository!
 
@@ -59,7 +53,8 @@ src/EffectsManager.cpp - comment out unused effects here. Comment out incudes at
 data/effects.json - default options for effects
 
     i - id of effect, should match one in src/EffectsManager.cpp
-    n - name of eefect visible in ui and Home Assistant
+    n - name of efect visible in ui and Home Assistant
+    e - effect enabled (will be ignored when pressing the button)
     s - effect speed
     l - effect scale
     b - effect brightness
@@ -112,7 +107,14 @@ Please do not use GPIO0, GPIO2, GPIO15 (D3, D4 and D8 on nodemcu boards) for but
 
 ## OTA - Over The Air updates
 
-You can upload firmware.bin, fs.bin, settings.json, effects.json with OTA using web interface. Boards with 1MB flash memory don't have enough space for firmware/fs updates, but capable of json configuration updates
+You can upload firmware.bin, fs.bin, settings.json, effects.json with OTA using web interface. Boards with 1MB flash memory don't have enough space for firmware/fs updates, but capable of json configuration updates. The lamp also allows direct OTA updated via port 8266.
+
+## Changes with original GyverLampCpp 
+- Generally optimized for ESP32 with the drawback that it might now work Sonoff or smaller chips.
+- Fixed some bugs in the WebUI (effects were not always loaded)
+- WiFi reconnect was buggy on ESP32 and has been replaced with WiFiManager
+- ArduinoOTA support (partitions have to be resized)
+
 
 ## Changes with original GyverLamp projects
 
@@ -127,7 +129,6 @@ You can upload firmware.bin, fs.bin, settings.json, effects.json with OTA using 
 
 - Clock effects
 - Spectrometer effect (requires microphone module or aux, should be uncommented in EffectsManager.cpp and added to effects.json)
-- React wifi manager self-coded component
 - React web with controls self-coded component. No need to install client applications
 - Firmware update page, allowing to upload firmware bin, filesystem bin or settings json
 - MQTT for Home Assistant integration
