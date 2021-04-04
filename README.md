@@ -41,25 +41,24 @@ This is how I built it:
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/01-materials.jpg)
 2. Drill a hole in the socket and guide a cable through it.
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/02-socket.jpg)
-3. Solder the power jack to the cable and plug it into the socket. Some material of the socket must be removed to have a level bottom surface.
+3. Solder the power jack to the cable and plug it into the socket. Some material of the socket must be removed to have a leveled bottom surface.
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/03-socket.jpg)
 4. Use some wax or hotglue to secure the jack into the socket. You can use some sandpaper to create a leveled surface.
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/04-socket.jpg)
 5. Print the socket.blend file and attach it to the socket with some hotglue:
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/05-socket.jpg)
-6. Get a plastic pipe with a 50cm outer diameter and 46cm inner diameter (height must be measure together with the top cap). It is not required for the cap to touch the lampshade and the touch sensors works also with some space. Create some holes for the matrix connectors and secure the matrix with some zip ties.
+6. Get a plastic pipe with a 50cm outer diameter and 46cm inner diameter (height must be measured together with the top cap). It is not required for the cap to touch the lampshade. The touch sensor works also with some space. Create some holes for the matrix connectors and secure the matrix with some zip ties.
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/06-pipe.jpg)
-7. Print the top.blend file (rearrange the thickness of the cap according to your pipe height), guide the cables of the touch sensors through the whole and solder them to the touch sensor.
+7. Print the top.blend file (rearrange the thickness of the cap according to your pipe height), guide the cables of the touch sensors through the hole and solder them to the touch sensor.
   ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/07-top.jpg)
 9. Wire the ESP with the ingoing connector of the matrix (red=5V, white=GND, green=21) and the touch sensor (27 from the touch I/O)
   ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/08-esp.jpg)
 10. Solder a small perfboard with two cable connectors (one side for your power supply, the other side to the matrix power input) and solder the touch sensors PWR/GND accordingly (or use a jumper connector if you have one :)).
   ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/09-power.jpg)
-11. Put everything into the pipe, drill a hole into the pipe/socket and secure the pipe on the socket with a coarse thread screw.
+11. Put everything into the pipe (secured with hotglue), drill a small hole into the pipe/socket and secure the pipe on the socket with a coarse thread screw.
   ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/10-result.jpg)
 
-Thats it. The lampshade is loose on the socket but you should not shake the lamp anyways. The socket and lampshade can be bought on AliExpress just search for GyverLamp.
-
+Thats it. The lampshade is loose on the socket but you should not shake the lamp anyways.
 
 # How to build
 
