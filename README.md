@@ -110,7 +110,7 @@ Please do not use GPIO0, GPIO2, GPIO15 (D3, D4 and D8 on nodemcu boards) for but
 You can upload firmware.bin, fs.bin, settings.json, effects.json with OTA using web interface. Boards with 1MB flash memory don't have enough space for firmware/fs updates, but capable of json configuration updates. The lamp also allows direct OTA updated via port 8266.
 
 ## Changes with original GyverLampCpp 
-- Generally optimized for ESP32 with the drawback that it might now work Sonoff or smaller chips.
+- Generally optimized for ESP32 with the drawback that it might now work on chips with less than 4 MB Flash.
 - Fixed some bugs in the WebUI (effects were not always loaded)
 - WiFi reconnect was buggy on ESP32 and has been replaced with WiFiManager
 - ArduinoOTA support (partitions have to be resized)
