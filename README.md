@@ -51,7 +51,7 @@ This is how I built it:
 11. Put everything into the pipe, drill a hole into the pipe/socket and secure the pipe on the socket with a coarse thread screw.
   ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/10-result.jpg)
 
-The lampshade has not been secured on the lamp.
+Thats it. The lampshade is loose on the socket but you should not shake the lamp anyways. The socket and lampshade can be bought on AliExpress just search for GyverLamp.
 
 
 # How to build
