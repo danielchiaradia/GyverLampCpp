@@ -31,6 +31,13 @@ Note: 1MB boards are not capable of OTA firmware updates
 # Construction
 This is how I built it:
 1. Get the following materials:
+   - ESP32
+   - Lampshade/Socket
+   - 1xARCELI 5PCS 2.5-5.5V TTP223
+   - 1xFemale DC Connector 2.1*5.5mm (no housing - you might have to remove it)
+   - 16x16 LED Matrix
+   - 5V 15Watt power supply
+   - 3D Printed Socket and Top parts (top cap height needs to be adjusted according to your pipe length)
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/01-materials.jpg)
 2. Drill a hole in the socket and guide a cable through it.
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/02-socket.jpg)
