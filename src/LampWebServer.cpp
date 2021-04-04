@@ -383,6 +383,9 @@ void LampWebServer::autoConnect()
         wifiManager.resetSettings();
     }
 
+    wifiManager.setHostname(mySettings->connectionSettings.hostname.c_str());
+    wifiManager.setConnectRetries(30);
+    wifiManager.setDarkMode(true);
     wifiManager.autoConnect(mySettings->connectionSettings.apName.c_str(), 
                             mySettings->connectionSettings.apPassword.c_str());
 
