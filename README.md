@@ -40,7 +40,7 @@ This is how I built it:
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/04-socket.jpg)
 5. Print the socket.blend file and attach it to the socket with some hotglue:
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/05-socket.jpg)
-6. Get a plastic pipe with a 50cm outer diameter and 46cm inner diameter (height must be measure together with the top cap). Create some holes for the matrix connectors and secure the matrix with some zip ties.
+6. Get a plastic pipe with a 50cm outer diameter and 46cm inner diameter (height must be measure together with the top cap). It is not required for the cap to touch the lampshade and the touch sensors works also with some space. Create some holes for the matrix connectors and secure the matrix with some zip ties.
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/06-pipe.jpg)
 7. Print the top.blend file (rearrange the thickness of the cap according to your pipe height), guide the cables of the touch sensors through the whole and solder them to the touch sensor.
   ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/07-top.jpg)
