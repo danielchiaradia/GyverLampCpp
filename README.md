@@ -143,9 +143,10 @@ You can upload firmware.bin, fs.bin, settings.json, effects.json with OTA using 
 
 ## Changes with original GyverLampCpp 
 - Generally optimized for ESP32 with the drawback that it might now work on chips with less than 4 MB Flash.
+- Removed the static hosted pages and host everything on the ESP.
 - Fixed some bugs in the WebUI (effects were not always loaded)
 - WiFi reconnect was buggy on ESP32 and has been replaced with WiFiManager
-- ArduinoOTA support (partitions have to be resized)
+- ArduinoOTA support (partitions have been resized)
 
 
 ## Changes with original GyverLamp projects
