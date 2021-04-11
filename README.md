@@ -22,7 +22,6 @@ All original code is owned by it's authors
 Supported boards:
 - esp8266 with 4MB flash. Environment name - `nodemcu`
 - esp-01s board woth 1MB flash. Environment name - `esp01s`
-- Sonoff (Basic) board with 1MB flash. Environment name - `sonoff-r1`
 - Sonoff (Basic) board with 4MB flash. Environment name - `sonoff-r1-4m`
 - Any ESP32 board. Environment name - `esp32dev`
 
@@ -51,7 +50,7 @@ This is how I built it:
    ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/06-pipe.jpg)
 7. Print the top.blend file (rearrange the thickness of the cap according to your pipe height), guide the cables of the touch sensors through the hole and solder them to the touch sensor.
   ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/07-top.jpg)
-9. Wire the ESP with the ingoing connector of the matrix (red=5V, white=GND, green=21) and the touch sensor (27 from the touch I/O)
+9. Wire the ESP with the ingoing connector of the matrix (red=5V, white=GND, green=21). The touch sensor to the eso (27 from the touch I/O, red=3.3V, black=GND)
   ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/08-esp.jpg)
 10. Solder a small perfboard with two cable connectors (one side for your power supply, the other side to the matrix power input) and solder the touch sensors PWR/GND accordingly (or use a jumper connector if you have one :)).
   ![Materials](https://github.com/danielchiaradia/GyverLampCpp/raw/master/assets/09-power.jpg)

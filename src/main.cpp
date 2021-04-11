@@ -33,7 +33,7 @@ namespace  {
 uint16_t webServerPort = 80;
 
 #if defined(ESP32)
-const uint8_t btnPin = 15;
+const uint8_t btnPin = 27;
 const GButton::PullType btnType = GButton::PullTypeLow;
 #elif defined(SONOFF)
 const uint8_t btnPin = 0;
@@ -261,6 +261,7 @@ void setup() {
     mySettings->readEffects();
     MyMatrix::Initialize();
 
+    mySettings->readAlarms();
 #if defined(SONOFF)
     pinMode(relayPin, OUTPUT);
     pinMode(miniLedPin, OUTPUT);

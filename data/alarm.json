@@ -1,0 +1,9 @@
+[
+    { "day": "Monday", "time": "10:41", "enabled": 1 },
+    { "day": "Tuesday", "time": "10:41", "enabled": 1 },
+    { "day": "Wednesday", "time": "10:41", "enabled": 1 },
+    { "day": "Thrusday", "time": "10:41", "enabled": 1 },
+    { "day": "Friday", "time": "10:41", "enabled": 1 },
+    { "day": "Saturday", "time": "10:41", "enabled": 1 },
+    { "day": "Sunday", "time": "10:41", "enabled": 1 }
+]

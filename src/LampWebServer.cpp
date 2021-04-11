@@ -384,7 +384,7 @@ void LampWebServer::autoConnect()
     }
 
     wifiManager.setHostname(mySettings->connectionSettings.hostname.c_str());
-    wifiManager.setConnectRetries(30);
+    wifiManager.setConnectRetries(3);
     wifiManager.setDarkMode(true);
     wifiManager.autoConnect(mySettings->connectionSettings.apName.c_str(), 
                             mySettings->connectionSettings.apPassword.c_str());
@@ -430,6 +430,15 @@ LampWebServer::LampWebServer(uint16_t webPort)
         JsonObject root = response->getRoot();
         mySettings->buildJsonMqtt(root);
         response->setLength();
+        request->send(response);
+    });
+
+    webServer->on(PSTR("/alarms"), HTTP_GET, [](AsyncWebServerRequest *request) {
+        PrettyAsyncJsonResponse *response = new PrettyAsyncJsonResponse(true);
+        JsonArray root = response->getRoot().to<JsonArray>();
+        mySettings->buildAlarmsJson(root);
+        response->setLength();
+        response->setContentType("application/json");
         request->send(response);
     });
 

@@ -1,5 +1,6 @@
 #include "Settings.h"
 #include "EffectsManager.h"
+#include "AlarmManager.h"
 #include "MyMatrix.h"
 #include "LocalDNS.h"
 #include "MqttClient.h"
@@ -24,9 +25,11 @@ uint32_t settingsSaveInterval = 5000;
 
 const char* settingsFileName PROGMEM = "/settings.json";
 const char* effectsFileName PROGMEM = "/effects.json";
+const char* alarmsFileName PROGMEM = "/alarms.json";
 
 const char* settingsFileNameSave PROGMEM = "/settings.json.save";
 const char* effectsFileNameSave PROGMEM = "/effects.json.save";
+const char* alarmsFileNameSave PROGMEM = "/alarms.json.save";
 
 std::vector<String> pendingConfig;
 std::vector<String> pendingCommand;
@@ -95,6 +98,14 @@ void restoreSettingsAndReboot()
     delay(5000);
 }
 
+void restoreAlarmsAndReboot()
+{
+    Serial.println(F("Restoring alarms json save and rebooting"));
+    copyFile(alarmsFileName, alarmsFileNameSave);
+    ESP.restart();
+    delay(5000);
+}
+
 void restoreEffectsAndReboot()
 {
     Serial.println(F("Restoring effects json save and rebooting"));
@@ -132,6 +143,7 @@ void Settings::loop()
         settingsSaveTimer = millis();
         saveSettings();
         saveEffects();
+        saveAlarms();
 
         if (pendingConfig.size()) {
             for (const String &config : pendingConfig) {
@@ -217,6 +229,35 @@ void Settings::saveEffects()
     busy = false;
 }
 
+void Settings::saveAlarms()
+{
+    busy = true;
+
+    Serial.print(F("Saving alarms... "));
+
+    File file = FLASHFS.open(alarmsFileNameSave, "w");
+    if (!file) {
+        Serial.println(F("Error opening alarms file from FLASHFS!"));
+        return;
+    }
+
+    DynamicJsonDocument json(serializeSize);
+    JsonArray root = json.to<JsonArray>();
+    alarmManager->buildAlarmJson(root);
+
+    if (serializeJson(json, file) == 0) {
+        Serial.println(F("Failed to serialize alarms"));
+        saveLater();
+    }
+    if (file) {
+        file.close();
+    }
+
+    Serial.println(F("Done!"));
+
+    busy = false;
+}
+
 void Settings::writeEffectsMqtt(JsonArray &array)
 {
     for (Effect *effect : effectsManager->effects) {
@@ -242,7 +283,7 @@ void Settings::processConfig(const String &message, uint32_t source)
     Serial.println(message);
 
     {
-        DynamicJsonDocument doc(512);
+        DynamicJsonDocument doc(1024);
         if (DeserializationError err = deserializeJson(doc, message)) {
             Serial.print(F("[processConfig] Error parsing json: "));
             Serial.println(err.c_str());
@@ -254,6 +295,7 @@ void Settings::processConfig(const String &message, uint32_t source)
             const bool working = doc[F("data")];
             Serial.printf_P(PSTR("working: %s\n"), working ? PSTR("true") : PSTR("false"));
             mySettings->generalSettings.working = working;
+            source = INT_MAX;
         } else if (event == F("ACTIVE_EFFECT")) {
             const int index = doc[F("data")];
             effectsManager->activateEffect(static_cast<uint8_t>(index));
@@ -268,7 +310,9 @@ void Settings::processConfig(const String &message, uint32_t source)
             }
             saveLater();
         } else if (event == F("ALARMS_CHANGED")) {
-
+            JsonArray jsonData = doc[F("data")].as<JsonArray>();
+            alarmManager->processAlarmSettings(jsonData);
+            saveLater();
         }
     }
 
@@ -549,6 +593,59 @@ bool Settings::readEffects()
     return true;
 }
 
+bool Settings::readAlarms()
+{
+    bool alarmsExists = FLASHFS.exists(alarmsFileName);
+    Serial.printf_P(PSTR("FLASHFS Alarm file exists: %s\n"), alarmsExists ? PSTR("true") : PSTR("false"));
+    if (!alarmsExists) {
+        effectsManager->processAllEffects();
+        saveEffects();
+        copyFile(alarmsFileNameSave, alarmsFileName);
+        return false;
+    }
+    bool alarmsSaveExists = FLASHFS.exists(alarmsFileNameSave);
+    Serial.printf_P(PSTR("FLASHFS Alarms save file exists: %s\n"), alarmsSaveExists ? PSTR("true") : PSTR("false"));
+    if (!alarmsSaveExists) {
+        copyFile(effectsFileName, effectsFileNameSave);
+    }
+
+    File alarms = FLASHFS.open(alarmsFileNameSave, "r");
+    Serial.printf_P(PSTR("FLASHFS Alarms file size: %zu\n"), alarms.size());
+    if (!alarms) {
+        Serial.println(F("FLASHFS Error reading alarms file"));
+        restoreAlarmsAndReboot();
+        return false;
+    }
+
+    Serial.println("reading alarms.json");
+    while(alarms.available()) {
+        String buffer = alarms.readStringUntil('\n');
+        Serial.println(buffer);
+    }
+    alarms.seek(0);
+    DynamicJsonDocument json(1024);
+    DeserializationError err = deserializeJson(json, alarms);
+    alarms.close();
+    if (err) {
+        Serial.print(F("FLASHFS Error parsing alarms json file: "));
+        Serial.println(err.c_str());
+        restoreAlarmsAndReboot();
+        return false;
+    }
+
+    JsonArray root = json.as<JsonArray>();
+    if (root.size() == 0) {
+        restoreAlarmsAndReboot();
+        return false;
+    }
+
+    alarmManager->processAlarmSettings(root);
+
+    // copyFile(alarmsFileNameSave, alarmsFileName);
+
+    return true;
+}
+
 String Settings::calculateMD5(File &file) {
     MD5Builder builder = MD5Builder();
     builder.begin();
@@ -624,6 +721,11 @@ void Settings::buildEffectsJson(JsonArray &effects)
         effectObject[F("b")] = effect->settings.brightness;
         effect->writeSettings(effectObject);
     }
+}
+
+void Settings::buildAlarmsJson(JsonArray &alarmsJson)
+{
+    alarmManager->buildAlarmJson(alarmsJson);
 }
 
 void Settings::buildJsonMqtt(JsonObject &root)

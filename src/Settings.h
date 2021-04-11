@@ -38,7 +38,7 @@ public:
 #if defined(SONOFF)
         uint8_t pin = 14;
 #elif defined(ESP32)
-        uint8_t pin = 13;
+        uint8_t pin = 21;
 #else
         uint8_t pin = 2;
 #endif
@@ -95,9 +95,11 @@ public:
     void saveLater();
     void saveSettings();
     void saveEffects();
+    void saveAlarms();
 
     void buildSettingsJson(JsonObject &root);
     void buildEffectsJson(JsonArray &effects);
+    void buildAlarmsJson(JsonArray &alarms);
     void buildJsonMqtt(JsonObject &root);
     void writeEffectsMqtt(JsonArray &array);
 
@@ -107,6 +109,7 @@ public:
 
     bool readSettings();
     bool readEffects();
+    bool readAlarms();
 
     GeneralSettings generalSettings;
     MatrixSettings matrixSettings;
